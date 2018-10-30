@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blog.Core</name>
+    </assembly>
+    <members>
+        <member name="M:Blog.Core.Controllers.ValuesController.Get">
+            <summary>
+            获取一个数据列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.ValuesController.Post(Blog.Core.Model.Love)">
+            <summary>
+            Post 请求
+            </summary>
+            <param name="love"></param>
+        </member>
+    </members>
+</doc>

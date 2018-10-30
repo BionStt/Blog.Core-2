@@ -2,19 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blog.Core.IServices;
+using Blog.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    [Authorize(Policy = "Admin")]
+    public class BlogController : ControllerBase
     {
         // GET api/values
+        /// <summary>
+        /// 获取一个数据列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<int> Get()
         {
-            return new string[] { "value1", "value2" };
+            IAdvertisementServices advertisementServices = new AdvertisementServices();
+            return advertisementServices.Sum(1, 2);
         }
 
         // GET api/values/5
@@ -25,8 +34,12 @@ namespace Blog.Core.Controllers
         }
 
         // POST api/values
+        /// <summary>
+        /// Post 请求
+        /// </summary>
+        /// <param name="love"></param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post()
         {
         }
 
