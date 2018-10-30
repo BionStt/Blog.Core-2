@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blog.Core.IServices;
 using Blog.Core.Model.Models;
-using Blog.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +14,13 @@ namespace Blog.Core.Controllers
     [Authorize(Policy = "Admin")]
     public class BlogController : ControllerBase
     {
+        IAdvertisementServices advertisementServices;
+
+        public BlogController(IAdvertisementServices _advertisementServices)
+        {
+            this.advertisementServices = _advertisementServices;
+        }
+
         // GET api/values
         /// <summary>
         /// 获取一个数据列表
@@ -23,7 +29,6 @@ namespace Blog.Core.Controllers
         [HttpGet("id")]
         public async Task<List<Advertisement>> Get(int id)
         {
-            IAdvertisementServices advertisementServices = new AdvertisementServices();
             return await advertisementServices.Query(d=>d.Id == id);
         }
 

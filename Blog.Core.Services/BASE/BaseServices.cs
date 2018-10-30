@@ -1,6 +1,5 @@
 ﻿using Blog.Core.IRepository.BASE;
 using Blog.Core.IServices.BASE;
-using Blog.Core.Repository.BASE;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -12,7 +11,7 @@ namespace Blog.Core.Services.BASE
     public class BaseServices<TEntity> : IBaseServices<TEntity> where TEntity : class, new()
     {
 
-        public IBaseRepository<TEntity> baseDal = new BaseRepository<TEntity>();
+        public IBaseRepository<TEntity> baseDal;
 
         public async Task<int> Add(TEntity model)
         {

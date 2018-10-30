@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Blog.Core.AuthHelper.OverWrite;
+using Blog.Core.IRepository;
+using Blog.Core.IServices;
 using Blog.Core.Repository;
+using Blog.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +33,7 @@ namespace Blog.Core
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -62,6 +68,9 @@ namespace Blog.Core
                     Type = "apiKey"
                 });
             });
+            #endregion
+
+            #region authorization
 
             services.AddAuthorization(options =>
             {
@@ -70,10 +79,32 @@ namespace Blog.Core
                 options.AddPolicy("AdminOrClient", policy => policy.RequireRole("Admin,Client").Build());
             });
 
+            #endregion
+
             BaseDBConfig.ConnectionString = Configuration.GetSection("AppSettings:SqlServerConnection").Value;
 
+            #region autofac
+
+            var builder = new ContainerBuilder();
+            var assemblysServices = Assembly.Load("Blog.Core.Services");
+            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+            var assemblysRepository = Assembly.Load("Blog.Core.Repository");
+            builder.RegisterAssemblyTypes(assemblysRepository).AsImplementedInterfaces();
+            //builder.RegisterType<AdvertisementServices>().As<IAdvertisementServices>();
+            //builder.RegisterType<AdvertisementRepository>().As<IAdvertisementRepository>();
+
+            builder.Populate(services);
+
+            var ApplicationContainer = builder.Build();
+
+            return new AutofacServiceProvider(ApplicationContainer);
+
             #endregion
+
+
+
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
