@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blog.Core.IServices;
+using Blog.Core.Model.Models;
 using Blog.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,18 +20,11 @@ namespace Blog.Core.Controllers
         /// 获取一个数据列表
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult<int> Get()
+        [HttpGet("id")]
+        public async Task<List<Advertisement>> Get(int id)
         {
             IAdvertisementServices advertisementServices = new AdvertisementServices();
-            return advertisementServices.Sum(1, 2);
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
+            return await advertisementServices.Query(d=>d.Id == id);
         }
 
         // POST api/values
