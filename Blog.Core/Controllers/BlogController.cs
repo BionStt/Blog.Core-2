@@ -15,10 +15,12 @@ namespace Blog.Core.Controllers
     public class BlogController : ControllerBase
     {
         IAdvertisementServices advertisementServices;
+        IBlogArticleServices blogArticleServices;
 
-        public BlogController(IAdvertisementServices _advertisementServices)
+        public BlogController(IAdvertisementServices _advertisementServices, IBlogArticleServices _blogArticleServices)
         {
             this.advertisementServices = _advertisementServices;
+            this.blogArticleServices = _blogArticleServices;
         }
 
         // GET api/values
@@ -27,9 +29,9 @@ namespace Blog.Core.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("id")]
-        public async Task<List<Advertisement>> Get(int id)
+        public async Task<List<BlogArticle>> Get(int id)
         {
-            return await advertisementServices.Query(d=>d.Id == id);
+            return await this.blogArticleServices.getBlogsById(id);
         }
 
         // POST api/values

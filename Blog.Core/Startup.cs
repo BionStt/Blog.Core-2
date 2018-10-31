@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
+using Blog.Core.AOP;
 using Blog.Core.AuthHelper.OverWrite;
 using Blog.Core.IRepository;
 using Blog.Core.IServices;
@@ -85,9 +87,20 @@ namespace Blog.Core
 
             #region autofac
 
+            services.AddScoped<ICaching, MemoryCaching>();
+
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<BlogCacheAOP>();//可以直接替换其他拦截器！一定要把拦截器进行注册
+
             var assemblysServices = Assembly.Load("Blog.Core.Services");
-            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+            builder.RegisterAssemblyTypes(assemblysServices)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+
+
             var assemblysRepository = Assembly.Load("Blog.Core.Repository");
             builder.RegisterAssemblyTypes(assemblysRepository).AsImplementedInterfaces();
             //builder.RegisterType<AdvertisementServices>().As<IAdvertisementServices>();
