@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\Blog.Core.Common\Blog.Core.Common.csproj" />
     <ProjectReference Include="..\Blog.Core.IRepository\Blog.Core.IRepository.csproj" />
     <ProjectReference Include="..\Blog.Core.Model\Blog.Core.Model.csproj" />
   </ItemGroup>

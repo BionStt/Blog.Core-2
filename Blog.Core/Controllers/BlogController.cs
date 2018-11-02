@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blog.Core.Common.Helper;
 using Blog.Core.IServices;
 using Blog.Core.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace Blog.Core.Controllers
 
         public BlogController(IAdvertisementServices _advertisementServices, IBlogArticleServices _blogArticleServices)
         {
+            //var connect = AppsettingsHelper.app(new string[] { "AppSettings", "RedisCaching", "ConnectionString" });
             this.advertisementServices = _advertisementServices;
             this.blogArticleServices = _blogArticleServices;
         }

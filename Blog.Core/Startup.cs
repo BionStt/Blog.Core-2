@@ -83,7 +83,7 @@ namespace Blog.Core
 
             #endregion
 
-            BaseDBConfig.ConnectionString = Configuration.GetSection("AppSettings:SqlServerConnection").Value;
+            //BaseDBConfig.ConnectionString = Configuration.GetSection("AppSettings:SqlServerConnection").Value;
 
             #region autofac
 
